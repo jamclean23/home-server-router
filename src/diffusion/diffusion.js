@@ -1,0 +1,42 @@
+// Javascript for diffusion page
+
+
+// ====== IMPORTS ======
+
+// Css
+import './diffusion.css';
+
+
+// ====== FUNCTIONS ======
+
+function attachListeners () {
+    addSubmitBtnListener();
+}
+
+function addSubmitBtnListener () {
+    const submitBtn = document.querySelector('#submitBtn');
+    submitBtn.addEventListener('click', handleSubmitClick);
+}
+
+async function handleSubmitClick () {
+    const promptTextArea = document.querySelector('#prompt');
+    promptTextArea.disabled = true;
+    const prompt = promptTextArea.value;
+
+
+    let result;
+
+    try {
+        const response = await fetch('/diffusion/txt2Img');
+        result = await response.json();
+        console.log(result);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        promptTextArea.disabled = false;
+    }
+}
+
+// ====== MAIN ======
+
+attachListeners();

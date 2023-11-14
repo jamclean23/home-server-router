@@ -1,0 +1,17 @@
+html {
+    background-color: rgb(53, 78, 103);
+    color: white;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+textarea {
+    resize: none;
+    min-width: 30rem;
+    min-height: 8rem;
+}
