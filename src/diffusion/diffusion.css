@@ -3,6 +3,18 @@ html {
     color: white;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -12,6 +24,17 @@ form {
 
 textarea {
     resize: none;
-    min-width: 30rem;
+    width: min(80vw, 30rem);
     min-height: 8rem;
+    padding: 1rem;
+}
+
+.resultImgWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.resultImg {
+    width: min(80vw, 30rem);
 }

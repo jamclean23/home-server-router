@@ -1,15 +1,17 @@
+// Diffusion route
+
+// ====== IMPORTS ======
+
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render('diffusion');
-});
+// Controller
+const controller = require('../controllers/diffusionController.js');
 
-router.get('/txt2Img', (req, res) => {
-    console.log('TXT2IMG TEST');
-    res.json({
-        msg: 'TEST ROUTE SUCCESS txt2Img'
-    });
-});
+// ====== ROUTES ======
+
+router.get('/', controller.diffusionPage);
+
+router.post('/txt2Img', controller.txt2Img);
 
 module.exports = router;

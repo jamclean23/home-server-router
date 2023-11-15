@@ -21,16 +21,32 @@ async function handleSubmitClick() {
   const promptTextArea = document.querySelector('#prompt');
   promptTextArea.disabled = true;
   const prompt = promptTextArea.value;
-  let result;
-  try {
-    const response = await fetch('/diffusion/txt2Img');
-    result = await response.json();
-    console.log(result);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    promptTextArea.disabled = false;
+  if (prompt) {
+    let result;
+    try {
+      const response = await fetch('/diffusion/txt2Img', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "prompt": prompt
+        })
+      });
+      result = await response.json();
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+
+    // Set result image if exists
+    if (result.result.images[0]) {
+      const resultImg = document.querySelector('.resultImg');
+      resultImg.src = `data:image/png;base64, ${result.result.images[0]}`;
+    }
   }
+  promptTextArea.disabled = false;
 }
 
 // ====== MAIN ======
