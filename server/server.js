@@ -15,13 +15,19 @@ const session = require('express-session');
 const https = require('https');
 const cors = require('cors');
 
+// Routes
 const diffusionRoute = require('./routes/diffusionRoute.js');
 
+const JobQueue = require('./functions/jobQueueFactory.js');
 
-// ====== GLOBAL VARS ======
+
+// ====== GLOBAL VARS / INIT ======
 
 const HTTP_PORT = 80;
 const HTTPS_PORT = 443;
+
+const jobQueue = JobQueue([logJobAdded], [logJobCompleted]);
+jobQueue.listener();
 
 // ====== FUNCTIONS ======
 
@@ -64,6 +70,7 @@ function startHttpsServer () {
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(passGlobal(jobQueue, 'jobQueue'));
     app.use((req, res, next) => {
         console.log(req.path);
         next();
@@ -85,6 +92,22 @@ function startHttpsServer () {
     .listen(HTTPS_PORT, ()=> {
         console.log('Https Server listening on port ' + HTTPS_PORT);
     });
+}
+
+function logJobAdded () {
+    console.log('Job added');
+}
+
+function logJobCompleted () {
+    console.log('Job completed');
+}
+
+function passGlobal (globalVar, nameOfVar) {
+    return function (req, res, next) {
+        console.log('Assigning Job Queue`');
+        req[nameOfVar] = globalVar;
+        next();
+    }
 }
 
 // ====== MAIN ======

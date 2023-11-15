@@ -18,6 +18,8 @@ function addSubmitBtnListener() {
   submitBtn.addEventListener('click', handleSubmitClick);
 }
 async function handleSubmitClick() {
+  const submitBtn = document.querySelector('#submitBtn');
+  submitBtn.disabled = true;
   const promptTextArea = document.querySelector('#prompt');
   promptTextArea.disabled = true;
   const prompt = promptTextArea.value;
@@ -42,10 +44,18 @@ async function handleSubmitClick() {
 
     // Set result image if exists
     if (result.result.images[0]) {
-      const resultImg = document.querySelector('.resultImg');
+      const resultImgWrapper = document.querySelector('.resultImgWrapper');
+      const resultImg = document.createElement('img');
+      resultImg.classList.add('resultImg');
       resultImg.src = `data:image/png;base64, ${result.result.images[0]}`;
+      if (resultImgWrapper.firstChild) {
+        resultImgWrapper.insertBefore(resultImg, resultImgWrapper.firstChild);
+      } else {
+        resultImgWrapper.appendChild(resultImg);
+      }
     }
   }
+  submitBtn.disabled = false;
   promptTextArea.disabled = false;
 }
 

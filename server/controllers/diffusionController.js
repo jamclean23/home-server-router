@@ -50,10 +50,30 @@ async function txt2Img (req, res) {
     }
 }
 
+async function apiTxt2Img (req, res) {
+    console.log(req.jobQueue);
+    req.jobQueue.push({
+        type: 'test',
+        date: new Date()
+    });
+    console.log('API TXT2IMG');
+    console.log(req.jobQueue.queue);
+    res.json({
+        msg: 'text api route success'
+    });
+}
+
+function jobs (req, res) {
+    res.json({
+        jobs: req.jobQueue.queue
+    });
+}
 
 // ====== EXPORTS ======
 
 module.exports = {
     diffusionPage,
-    txt2Img
+    txt2Img,
+    apiTxt2Img,
+    jobs
 }
