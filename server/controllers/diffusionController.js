@@ -50,18 +50,7 @@ async function txt2Img (req, res) {
     }
 }
 
-async function apiTxt2Img (req, res) {
-    console.log(req.jobQueue);
-    req.jobQueue.push({
-        type: 'test',
-        date: new Date()
-    });
-    console.log('API TXT2IMG');
-    console.log(req.jobQueue.queue);
-    res.json({
-        msg: 'text api route success'
-    });
-}
+
 
 function jobs (req, res) {
     res.json({
@@ -69,11 +58,55 @@ function jobs (req, res) {
     });
 }
 
+async function apiTxt2Img (req, res) {
+    console.log('NEW JOB REQUEST');
+
+    console.log('Prompt:');
+    console.log(req.body.prompt);
+
+    try {
+        const id = await req.jobQueue.push(req, 'txt2Img', req.body.prompt);
+        console.log('Job added');   
+        res.json({
+            msg: 'test job added',
+            jobId: id
+        });
+        return;
+    } catch (err) {
+        res.status(400).json({
+            msg: 'Job not added',
+            err: err
+        });
+    }
+
+}
+
+async function apiJobUpdate (req, res) {
+    try {
+        const result = await req.jobQueue.getJobUpdate(req.body.jobId);
+
+        res.json(result);
+    } catch (err) {
+        res.status(404).json({
+            msg: 'Error while requesting update',
+            err
+        });
+    }
+}
+
+function apiFourOhFour (req, res) {
+    res.status(404).json({
+        msg: 'Endpoint does not exist'
+    })
+}
+
 // ====== EXPORTS ======
 
 module.exports = {
     diffusionPage,
     txt2Img,
+    jobs,
     apiTxt2Img,
-    jobs
+    apiJobUpdate,
+    apiFourOhFour
 }

@@ -11,13 +11,22 @@ const fs = require('fs');
 const express = require('express');
 const session = require('express-session');
 
+// Dotenv
+require('dotenv').config({
+    path: path.join(__dirname, '../config/.env')
+});
+
 // Https
 const https = require('https');
 const cors = require('cors');
 
+// Mongoose
+const mongoose = require('mongoose');
+
 // Routes
 const diffusionRoute = require('./routes/diffusionRoute.js');
 
+// Functions
 const JobQueue = require('./functions/jobQueueFactory.js');
 
 
@@ -29,7 +38,38 @@ const HTTPS_PORT = 443;
 const jobQueue = JobQueue([logJobAdded], [logJobCompleted]);
 jobQueue.listener();
 
+
+// ====== LISTENERS ====
+
+// On app closing
+process.on('exit', exitHandler);
+
+// On ctrl+c
+process.on('SIGINT', exitHandler);
+
+// On nodemon restart
+process.on('SIGUSR1', exitHandler);
+process.on('SIGUSR2', exitHandler);
+
+// On uncaught exception
+process.on('uncaughtException', exitHandler);
+
+
 // ====== FUNCTIONS ======
+
+function exitHandler () {
+    console.log('Handling exit');
+    interruptAi();
+    process.exit();
+}
+
+async function interruptAi () {
+    const response = await fetch('http://127.0.0.1:7860/sdapi/v1/interrupt', {
+        method: "POST"
+    });
+    const result = await response.json();
+    console.log(result);
+}
 
 function startHttpServer () { 
     const app = express();
@@ -58,8 +98,15 @@ function startHttpServer () {
     });
 }
 
-function startHttpsServer () {
+async function startHttpsServer () {
     
+    // Mongoose
+    try {
+        await mongoose.connect(process.env.MONGO_MONGOOSE_CONNECT);
+    } catch (err) {
+        throw new Error(err);
+    }
+
     // Express Setup
     const app = express();
     app.set('view engine', 'ejs');
