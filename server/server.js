@@ -42,29 +42,29 @@ jobQueue.listener();
 // ====== LISTENERS ====
 
 // On app closing
-process.on('exit', exitHandler);
+// process.on('exit', exitHandler);
 
 // On ctrl+c
-process.on('SIGINT', exitHandler);
+// process.on('SIGINT', exitHandler);
 
 // On nodemon restart
-process.on('SIGUSR1', exitHandler);
-process.on('SIGUSR2', exitHandler);
+// process.on('SIGUSR1', exitHandler);
+// process.on('SIGUSR2', exitHandler);
 
 // On uncaught exception
-process.on('uncaughtException', exitHandler);
+// process.on('uncaughtException', exitHandler);
 
 
 // ====== FUNCTIONS ======
 
-function exitHandler () {
-    console.log('Handling exit');
+function exitHandler (reason) {
+    console.log('Handling exit: ' + reason);
     interruptAi();
     process.exit();
 }
 
 async function interruptAi () {
-    const response = await fetch('http://127.0.0.1:7860/sdapi/v1/interrupt', {
+    const response = await fetch('http://127.0.0.1:7860/sdapi/v1/skip', {
         method: "POST"
     });
     const result = await response.json();

@@ -9,6 +9,10 @@ const mongoose = require('mongoose');
 // ====== SCHEMA ======
 
 const jobSchema = new mongoose.Schema({
+    _id: {
+        type: mongoose.Schema.ObjectId,
+        required: true
+    },
     type: {
         type: String, 
         enum: ['txt2Img', 'img2Img'],
@@ -20,7 +24,7 @@ const jobSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        required: true
     },
     prompt: {
         type: String,
@@ -29,13 +33,17 @@ const jobSchema = new mongoose.Schema({
     progress: {
         type: Number,
         default: 0
+    },
+    image: {
+        type: String,
+        required: true
     }
 
   });
 
-  const Job = mongoose.model('Job', jobSchema);
+  const CompletedJob = mongoose.model('completed_jobs', jobSchema);
 
 
 // ====== EXPORTS ======
 
-  module.exports = Job;
+  module.exports = CompletedJob;
