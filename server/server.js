@@ -64,7 +64,7 @@ function exitHandler (reason) {
 }
 
 async function interruptAi () {
-    const response = await fetch('http://127.0.0.1:7860/sdapi/v1/skip', {
+    const response = await fetch('http://127.0.0.1:7860/sdapi/v1/interrupt', {
         method: "POST"
     });
     const result = await response.json();
@@ -151,7 +151,6 @@ function logJobCompleted () {
 
 function passGlobal (globalVar, nameOfVar) {
     return function (req, res, next) {
-        console.log('Assigning Job Queue`');
         req[nameOfVar] = globalVar;
         next();
     }

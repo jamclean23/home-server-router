@@ -6,6 +6,7 @@
 const Job = require('../models/job.js');
 const CompletedJob = require('../models/completedJob.js');
 const mongoose = require('mongoose');
+const readline = require('readline');
 
 
 // ====== FUNCTIONS ======
@@ -20,9 +21,6 @@ function JobQueue (pushCallbackArray = [], shiftCallbackArray = []) {
         if (finishedJob) {
             currentJob = {"_id": ''};
         }
-
-        console.log('\nCurrent Job');
-        console.log(currentJob);
 
         let available;
 
@@ -51,9 +49,6 @@ function JobQueue (pushCallbackArray = [], shiftCallbackArray = []) {
                 throw new Error(err);
             }
         }
-
-        console.log('Next Job');
-        console.log(nextJob);
 
         let readyToSubmit = false;
 
@@ -86,6 +81,7 @@ function JobQueue (pushCallbackArray = [], shiftCallbackArray = []) {
                     const result = await response.json();
                     workingDoc.progress = result.progress;
                     workingDoc.save();
+                    updateLine('Progress: ' + workingDoc.progress);
                 }
                 } catch (err) {
                 console.log(err);
@@ -182,45 +178,89 @@ function JobQueue (pushCallbackArray = [], shiftCallbackArray = []) {
                 const response = await fetch('http://127.0.0.1:7860/internal/ping');
                 const result = await response.json();
                 return true;
-            } catch (err) {
+            } catch (err) {     
                 return false;
             }
+        }
+
+        function updateLine (textContent) {
+            readline.cursorTo(process.stdout, -1);
+            process.stdout.write("\r\x1b[K");
+            process.stdout.write(textContent);
+            process.stdout.write('\n');
         }
     }
 
     async function getJobUpdate (jobId) {
+        let result;
+        let complete = false;
+        let error;
+        let img;
+        let index;
+
+        console.log('Getting job update');
         try {
-            const result = await Job.findOne({"_id": jobId});
+            console.log('Looking for job in jobs');
+            // Search for job in jobs
+            result = await Job.findOne({"_id": jobId});
 
-            let index = null;
+            // If found, get the order in the queue
             if (result) {
+                console.log('Found in jobs');
                 const jobs = await Job.find({}).sort({date: 1});
-
                 for (let i = 0; i < jobs.length; i++) {
                     if (jobs[i]["_id"].toString() === jobId) {
                         index = i;
                     }
                 }
-
-                console.log(jobs);
             }
 
+        } catch (err) {
+            console.log(err);
+        }
+
+        if (!result) {
+            console.log('Not found in jobs, looking in completed jobs');
+            try {
+                result = await CompletedJob.findOne({"_id": jobId});
+                if (result) {
+                    console.log('Found in completed jobs');
+                    complete = true;
+                    img = result.image;
+                }
+            } catch (err) {
+                error = err.message;
+            }
+        }
+
+        console.log('INDEX of job: ' + index);
+
+        if (result) {
             let response = {
+                found: true,
                 jobId,
-                complete: false,
-                progress: 0,
+                complete,
+                progress: result.progress,
                 prompt: result.prompt,
                 type: result.type,
-                date: result.date
+                date: result.date,
+                queuePosition: index
             };
 
-            if (index != null) {
-                response.placeInQueue = index;
+            if (img) {
+                response.img = img;
+            }
+
+            if (error) {
+                response.error = error;
             }
 
             return response;
-        } catch (err) {
-            throw new Error(err);
+        } else {
+            console.log('Job not found');
+            return {
+                found: false
+            }
         }
     }
 

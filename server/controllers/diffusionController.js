@@ -89,7 +89,7 @@ async function apiJobUpdate (req, res) {
     } catch (err) {
         res.status(404).json({
             msg: 'Error while requesting update',
-            err
+            err: err.message
         });
     }
 }
