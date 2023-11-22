@@ -4,6 +4,7 @@ module.exports = {
     entry: {
         '/diffusion/diffusion': './src/diffusion/diffusion.js',
         '/serverInfo/serverInfo': './src/serverInfo/serverInfo.js',
+        '/diffusionApiRequest/diffusionApiRequest': './src/diffusionApiRequest/diffusionApiRequest.js'
     },
     output: {
         filename: '[name].js',

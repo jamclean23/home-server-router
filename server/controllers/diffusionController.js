@@ -1,8 +1,26 @@
 // Controller for diffusion route
 
+
 // ====== IMPORTS ======
 
+// System
 const fs = require('fs');
+
+// Keys
+const { 
+    v1: uuidv1,
+    v4: uuidv4,
+  } = require('uuid');
+
+// Encryption
+const bcrypt = require('bcryptjs');
+
+// Validation/sanitation
+const { validationResult } = require('express-validator');
+
+// Models
+const diffusionApiUsers = require('../models/diffusionApiUsers.js');
+
 
 // ====== FUNCTIONS ======
 
@@ -94,6 +112,34 @@ async function apiJobUpdate (req, res) {
     }
 }
 
+function requestKeyPage (req, res) {
+    res.render('diffusionApiRequest');
+}
+
+async function requestKey (req, res) {
+    const errors = validationResult(req);
+    
+    if (!errors.isEmpty()) {
+        return res.status(422).json({errors: errors.array()``});
+    }
+
+    const newUser = new diffusionApiUsers({
+        key: await bcrypt.hash(uuidv4(), 10),
+        origin: req.body.origin,
+        email: req.body.email
+    });
+
+    try {
+        await newUser.save();
+    } catch (err) {
+        res.status(400).json({
+            error: err
+        });
+    }
+
+    res.render('diffusionKeyConfirmation', {email: req.body.email, origin: req.body.origin});
+}
+
 function apiFourOhFour (req, res) {
     res.status(404).json({
         msg: 'Endpoint does not exist'
@@ -104,6 +150,8 @@ function apiFourOhFour (req, res) {
 
 module.exports = {
     diffusionPage,
+    requestKeyPage,
+    requestKey,
     txt2Img,
     jobs,
     apiTxt2Img,

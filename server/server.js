@@ -75,7 +75,6 @@ function startHttpServer () {
     const app = express();
     
     app.use(cors());
-
     app.get('/.well-known/pki-validation/34E46AB8F586BC6409067BC8BA722B9B.txt', (req, res) => {
         res.sendFile('./cert_validation/34E46AB8F586BC6409067BC8BA722B9B.txt', { root: path.join(__dirname)}, (err) => {
             if (err) {
@@ -113,6 +112,7 @@ async function startHttpsServer () {
     app.set('views', path.join(__dirname, 'views'));
 
     // Middleware
+    
     app.use(cors());
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));

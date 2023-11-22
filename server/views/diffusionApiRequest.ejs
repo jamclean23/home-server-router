@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffusion - Api Key</title>
+    <script defer src="/diffusionApiRequest/diffusionApiRequest.js"></script>
+    <link rel="stylesheet" href="/diffusionApiRequest/diffusionApiRequest.css"/>
+</head>
+
+<body>
+    <h1>Request a key for Stable Diffusion</h1>
+    <p>
+        Want to use this api with your website?<br/>
+        Request an api key, and you'll receive an email once it is approved.
+    </p>
+    <form method="POST" action="/diffusion/request_key">
+        <div class="inputWrapper">
+            <label for="originInput">Origin of your website</label>
+            <input required id="originInput" name="origin" type="text"/>
+        </div>
+        <div class="inputWrapper">
+            <label for="emailInput">Email</label>
+            <input required id="emailInput" name="email" type="email"/>
+        </div>
+        <button>Submit</button>
+    </form>
+</body>
+
+</html>
