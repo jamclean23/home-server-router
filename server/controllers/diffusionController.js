@@ -5,6 +5,7 @@
 
 // System
 const fs = require('fs');
+const path = require('path');
 
 // Keys
 const { 
@@ -17,6 +18,12 @@ const bcrypt = require('bcryptjs');
 
 // Validation/sanitation
 const { validationResult } = require('express-validator');
+
+// Email
+const sendMail = require('../functions/sendMail.js');
+
+// Ejs async rendering
+const renderEjsAsync = require('../functions/renderEjsAsync.js');
 
 // Models
 const diffusionApiUsers = require('../models/diffusionApiUsers.js');
@@ -123,11 +130,45 @@ async function requestKey (req, res) {
         return res.status(422).json({errors: errors.array()``});
     }
 
+    const newKey = uuidv4();
+
+    let emailTemplate;
+
+    try {
+        emailTemplate = await renderEjsAsync(
+            path.join(__dirname, '../views/requestKeyConfEmail.ejs'),
+            {
+                key: newKey,
+                origin: req.body.origin
+            }
+            );
+    } catch (err) {
+        console.log(err);
+        res.status(400).send('Oops, something went wrong.');
+    }
+
+    if (!emailTemplate) {
+        return;
+    }
+
+    const mailOptions = {
+        to: req.body.email,
+        subject: "Server0424 Diffusion Key",
+        html: emailTemplate
+    }
+
+    try {
+        sendMail(mailOptions);
+    } catch (err) {
+        console.log(err);
+    }
+
     const newUser = new diffusionApiUsers({
-        key: await bcrypt.hash(uuidv4(), 10),
+        key: await bcrypt.hash(newKey, 10),
         origin: req.body.origin,
         email: req.body.email
     });
+
 
     try {
         await newUser.save();

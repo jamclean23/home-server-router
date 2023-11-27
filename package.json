@@ -29,6 +29,7 @@
     "express-validator": "^7.0.1",
     "mini-css-extract-plugin": "^2.7.6",
     "mongoose": "^8.0.1",
+    "nodemailer": "^6.9.7",
     "nodemon": "^3.0.1",
     "style-loader": "^3.3.3",
     "uuid": "^9.0.1",
