@@ -2,3 +2,67 @@ html {
     background-color: rgb(53, 78, 103);
     color: white;
 }
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
+nav {
+    background-color: slategray;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 2px black;
+}
+
+nav h2 {
+    margin: 0;
+}
+
+.linkBtn {
+    background-color: inherit;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    padding: 0;
+    margin-left: 1rem;
+    text-decoration: underline;
+}
+
+.linkBtn span {
+    position: relative;
+}
+
+.linkBtn:hover span::after {
+    height: 0;
+    width: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent; 
+    border-right: 5px solid white; 
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.homeBtn {
+    height: 4rem;
+    width: 4rem;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    border-radius: 100%;
+    box-shadow: 0 0 2px white;
+}
+
+.homeBtn img {
+    height: 100%;
+}
+
+.homeBtn:hover {
+    transform-origin: center;
+    transform: scale(1.05);
+    transition: transform .1s ease-out;
+}

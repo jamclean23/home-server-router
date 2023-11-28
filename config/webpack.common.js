@@ -3,6 +3,8 @@ const path = require('path');
 module.exports = {
     entry: {
         '/diffusion/diffusion': './src/diffusion/diffusion.js',
+        '/diffusionKeyConf/diffusionKeyConf': './src/diffusionKeyConf/diffusionKeyConf.js',
+        '/diffusionTest/diffusionTest': './src/diffusionTest/diffusionTest.js',
         '/serverInfo/serverInfo': './src/serverInfo/serverInfo.js',
         '/diffusionApiRequest/diffusionApiRequest': './src/diffusionApiRequest/diffusionApiRequest.js'
     },

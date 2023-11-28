@@ -6,6 +6,8 @@ const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
 
+// Middleware
+const diffusionKeyAuth = require('../middleware/diffusionKeyAuth.js');
 
 // Controller
 const controller = require('../controllers/diffusionController.js');
@@ -25,12 +27,12 @@ router.post('/txt2Img', controller.txt2Img);
 router.get('/request_key', controller.requestKeyPage);
 router.post('/request_key', reqKeyValidate, controller.requestKey);
 
-router.post('/api/txt2Img', controller.apiTxt2Img);
+router.post('/api/txt2Img', diffusionKeyAuth, controller.apiTxt2Img);
 
 router.get('/api/jobs', controller.jobs);
 
 
-router.post('/api/job_update', controller.apiJobUpdate);
+router.post('/api/job_update', diffusionKeyAuth, controller.apiJobUpdate);
 
 router.use('/api/*', controller.apiFourOhFour);
 

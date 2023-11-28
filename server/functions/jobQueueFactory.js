@@ -198,6 +198,10 @@ function JobQueue (pushCallbackArray = [], shiftCallbackArray = []) {
         let img;
         let index;
 
+        if (!jobId || jobId === "undefined") {
+            return;
+        }
+
         console.log('Getting job update');
         try {
             console.log('Looking for job in jobs');

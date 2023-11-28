@@ -28,6 +28,7 @@ const diffusionRoute = require('./routes/diffusionRoute.js');
 
 // Functions
 const JobQueue = require('./functions/jobQueueFactory.js');
+require('./functions/diffusionKeyStatusListener.js').init();
 
 
 // ====== GLOBAL VARS / INIT ======

@@ -1,0 +1,43 @@
+html {
+    background-color: rgb(53, 78, 103);
+    color: white;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+textarea {
+    resize: none;
+    width: min(80vw, 30rem);
+    min-height: 8rem;
+    padding: 1rem;
+}
+
+.resultImgWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.resultImg {
+    width: min(80vw, 30rem);
+}

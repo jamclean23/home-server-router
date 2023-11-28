@@ -173,6 +173,7 @@ async function requestKey (req, res) {
     try {
         await newUser.save();
     } catch (err) {
+        console.log(err);
         res.status(400).json({
             error: err
         });

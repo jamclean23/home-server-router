@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diffusion - Request Received</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico?v=1.0">
+    <script defer src="/diffusionKeyConf/diffusionKeyConf.js"></script>
+    <link rel="stylesheet" href="/diffusionKeyConf/diffusionKeyConf.css"/>
 </head>
 <body>
     <h1>Request Received</h1>
     <p>
         Your api key request for origin: <%=locals.origin%> has been received and is being processed.<br/>
-        You'll receive an email at <%=locals.email%> when complete.</p>
+        You'll receive an email at <%=locals.email%> when complete.
+    </p>
+    <button onclick="location.href = '/diffusion'">Back to Diffusion page</button>
 </body>
 </html>

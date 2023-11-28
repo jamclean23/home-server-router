@@ -3,41 +3,36 @@ html {
     color: white;
 }
 
-body {
+pre {
+    background-color: slategray;
+    border-radius: 4px;
+    box-shadow: 0 0 2px black;
+    min-width: fit-content;
+    padding-inline: 1rem;
+}
+
+header {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
+.homeBtn {
+    height: 4rem;
+    width: 4rem;
+    background-color: transparent;
     padding: 0;
-    margin: 0;
-    gap: 2rem;
+    border: none;
+    border-radius: 100%;
+    box-shadow: 0 0 2px white;
 }
 
-h1 {
-    text-align: center;
+.homeBtn img {
+    height: 100%;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-textarea {
-    resize: none;
-    width: min(80vw, 30rem);
-    min-height: 8rem;
-    padding: 1rem;
-}
-
-.resultImgWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    padding-bottom: 2rem;
-}
-
-.resultImg {
-    width: min(80vw, 30rem);
+.homeBtn:hover {
+    transform-origin: center;
+    transform: scale(1.05);
+    transition: transform .1s ease-out;
 }

@@ -3,17 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server 0424 - Stable Diffusion</title>
     <script defer src="/diffusion/diffusion.js"></script>
     <link rel="stylesheet" href="/diffusion/diffusion.css"/>
+    <title>Stable Diffusion Api</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico?v=1.0">
 </head>
+
 <body>
-    <h1>Stable Diffusion Request</h1>
-    <form action="javascript:void(0);">
-        <textarea placeholder="Prompt" id="prompt"></textarea>
-        <button id="submitBtn">Submit</button>
-    </form>
-    <section class="resultImgWrapper">
-    </section>
+    <header>
+        <h1>Stable Diffusion Api</h1>
+        <button onclick="location.href = '/'" class="homeBtn"><img src="/assets/logo.png"/></button>
+    </header>
+    <p>This endpoint is used for making simple text to image requests to a stable diffusion instance.</p>    
+    <button onclick="location.href = '/diffusion/request_key'">Request your key here</button>
+    <h2>Submission</h2>
+    <p>Make requests to the endpoint: "https://server0424.lol/diffusion/api/txt2Img".</p>
+    <p>Example submission:</p>
+    <pre>
+        <code>
+try {
+    const response = await fetch('https://server0424.lol/diffusion/api/txt2Img', {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "key": "YOUR KEY HERE"
+        },
+        body: JSON.stringify({
+            "prompt": "YOUR PROMPT HERE"
+        })
+    });        
+    const result = await response.json();
+    // START YOUR LISTENER FOR JOB UPDATES HERE
+} catch (err) {
+    console.log(err);
+}
+        </code>
+    </pre>
+    
+    <h2>Update Status</h2>
+    <p>Send request to "https://server0424.lol/diffusion/api/job_update" with your jobId for progress on your task.</p>
+    <p>
+        The response will contain an "img" property when complete, which will be a png in base64 encoding.<br/>
+        It will also contain a "complete" property, which will be true when the job is finished.
+    </p>
+
+    <p>Example job update request:</p>
+    <pre>
+        <code>
+try {
+    const response = await fetch('https://server0424.lol/diffusion/api/job_update', {
+        mode: "cors",
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "key": "YOUR KEY HERE"
+        },
+        body: JSON.stringify({
+            "jobId": "YOUR JOB ID"
+        })
+    });
+    const result = await response.json();
+
+    if (result.complete === true) {
+        const resultImg = `data:image/png;base64, ${result.img}`;
+        // SET IMG TO YOUR IMG ELEMENT HERE
+    }
+} catch (err) {
+    console.log(err);
+}                
+        </code>
+    </pre>
 </body>
+    
 </html>
